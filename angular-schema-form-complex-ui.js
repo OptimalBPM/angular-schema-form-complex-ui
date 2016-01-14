@@ -1,4 +1,4 @@
-angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><label ng-show=\"showTitle()\">{{form.title}}</label><div ng-model=\"$$value$$\" ng-init=\"controller.complexModel=$$value$$\" complex-ui-directive=\"\"><div name=\"controller.complexForm\" sf-schema=\"controller.complexSchema\" sf-form=\"controller.complexForm\" sf-model=\"controller.complexModel\"></div></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
+angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><div ng-init=\"controller.complexModel=$$value$$\" complex-ui-directive=\"\"><div ng-if=\"form.options.showButton == true\"><label>{{form.title}}</label>&nbsp;<button ng-click=\"controller.toggleModal()\">{{form.options.buttonCaption}}</button><modal title=\"Login form\" visible=\"showModal\"><div name=\"controller.complexForm\" sf-schema=\"controller.complexSchema\" sf-form=\"controller.complexForm\" sf-model=\"controller.complexModel\"></div></modal></div><div ng-if=\"form.options.showButton != true\"><label ng-show=\"showTitle()\">{{form.title}}</label><div name=\"controller.complexForm\" sf-schema=\"controller.complexSchema\" sf-form=\"controller.complexForm\" sf-model=\"controller.complexModel\"></div></div></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
 /// <reference path="../typings/angularjs/angular.d.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
 angular.module('schemaForm').config(['schemaFormProvider',
@@ -31,6 +31,9 @@ var ComplexUIController = (function () {
         this.alertObj = function (obj) {
             window.alert(JSON.stringify(obj));
         };
+        this.toggleModal = function () {
+            this.directiveScope.showModal = !this.directiveScope.showModal;
+        };
         this.getDefinitions = function () {
             if (_this.directiveScope.form["options"]) {
                 var _defs = _this.directiveScope.form["options"]["definitionsCallback"]();
@@ -49,11 +52,38 @@ var ComplexUIController = (function () {
     return ComplexUIController;
 })();
 ;
+angular.module('schemaForm').directive('modal', function () {
+    return {
+        template: '<div class="modal fade">' +
+            '<div class="modal-dialog">' +
+            '<div class="modal-content">' +
+            '<div class="modal-header">' +
+            '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<h4 class="modal-title">{{ title }}</h4>' +
+            '</div>' +
+            '<div class="modal-body" ng-transclude></div>' +
+            '</div>' +
+            '</div>' +
+            '</div>',
+        restrict: 'E',
+        transclude: true,
+        replace: true,
+        scope: true,
+        link: function postLink(scope, element, attrs) {
+            scope.title = attrs["title"];
+            scope.$watch((attrs).visible, function (value) {
+                if (value == true)
+                    $(element).modal('show');
+                else
+                    $(element).modal('hide');
+            });
+        }
+    };
+});
 // Create a directive to properly access the ngModel set in the view (src/angular-schema-form-typescript.html)
 angular.module('schemaForm').directive('complexUiDirective', function () {
     return {
-        // The directive needs the ng-model to be set, look at the <div>
-        require: ['ngModel'],
+        require: [],
         restrict: 'A',
         // Do not create a isolate scope, makeCamelCase should be available to the button element
         scope: false,

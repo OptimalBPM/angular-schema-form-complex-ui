@@ -25,6 +25,10 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
                     test1: {
                         type: "string",
                         description: "So this is inside the nested ASF instance"
+                    },
+                    test2: {
+                        type: "string",
+                        description: "...second field"
                     }
                 },
                 required: ["test1"]
@@ -34,6 +38,17 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
                     "key": "test1",
                     "title": "Inside the schema form.",
                     "type": "string"
+                },
+                {
+                    "key": "test2",
+                    "title": "Inside the schema form.",
+                    "type": "select",
+                    "titleMap": [
+                        {"value": "value1", "name": "text1"},
+                        {"value": "value2", "name": "text2"},
+                        {"value": "value3", "name": "text3"},
+                        {"value": "value4", "name": "text4"}
+                    ]
                 },
                 {
                     type: "button",
@@ -54,9 +69,13 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             complexUIField: {
                 type: "object",
                 format: "",
-                description: "When you edit this, the value will become automatically camelCase:d."
+                description: "So this is a complex UI field."
+            },
+            anyfield: {
+                type: "string",
+                format: "",
+                description: "This is just a run-of-the-mill string field."
             }
-
         },
         required: ["complexUIField"]
     };
@@ -68,6 +87,15 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             "key": "complexUIField",
             "title": "Example of complex structure editor",
             "type": "complex-ui",
+            "options": {
+                "definitionsCallback": $scope.resolveReference,
+                "showButton": true,
+                "buttonCaption": ".."
+            }
+        },
+        {
+            "key": "anyfield",
+            "title": "A string",
             "options": {
                 "definitionsCallback": $scope.resolveReference
             }

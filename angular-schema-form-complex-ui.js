@@ -1,4 +1,4 @@
-angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><label ng-show=\"showTitle()\">{{form.title}}</label><div ng-model=\"$$value$$\" complex-ui-directive=\"\"><ng-form name=\"controller.complexForm\" sf-schema=\"controller.complexSchema\" sf-form=\"controller.complexForm\" sf-model=\"controller.complexModel\" ng-submit=\"submitted(controller.complexForm)\"></ng-form></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
+angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><label ng-show=\"showTitle()\">{{form.title}}</label><div ng-model=\"$$value$$\" ng-init=\"controller.complexModel=$$value$$\" complex-ui-directive=\"\"><div name=\"controller.complexForm\" sf-schema=\"controller.complexSchema\" sf-form=\"controller.complexForm\" sf-model=\"controller.complexModel\"></div></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
 /// <reference path="../typings/angularjs/angular.d.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
 angular.module('schemaForm').config(['schemaFormProvider',
@@ -31,6 +31,17 @@ var ComplexUIController = (function () {
         this.alertObj = function (obj) {
             window.alert(JSON.stringify(obj));
         };
+        this.getDefinitions = function () {
+            if (_this.directiveScope.form["options"]) {
+                var _defs = _this.directiveScope.form["options"]["definitionsCallback"]();
+                _this.complexForm = _defs["form"];
+                _this.complexSchema = _defs["schema"];
+            }
+        };
+        this.innerSubmit = function (form) {
+            _this.directiveScope.$broadcast("schemaFormValidate");
+            console.log(_this.complexModel);
+        };
         console.log("Initiating the process controller" + $scope.toString());
         $scope.controller = this;
         this.directiveScope = $scope;
@@ -49,30 +60,7 @@ angular.module('schemaForm').directive('complexUiDirective', function () {
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', ComplexUIController],
         link: function (scope, iElement, iAttrs, ngModelCtrl) {
-            scope.controller.complexModel = ngModelCtrl;
-            scope.controller.complexForm = [
-                {
-                    "key": "test1",
-                    "title": "Inside the schema form.",
-                    "type": "string"
-                },
-                {
-                    type: "submit",
-                    style: "btn-info",
-                    title: "OK"
-                }
-            ];
-            scope.controller.complexSchema = {
-                type: "object",
-                title: "Complex UI test",
-                properties: {
-                    test1: {
-                        type: "string",
-                        description: "So this is inside the nested ASF instance"
-                    }
-                },
-                required: ["test1"]
-            };
+            scope.controller.getDefinitions();
         }
     };
 });

@@ -14,16 +14,22 @@ angular.module('schemaForm').config(['schemaFormProvider',
 
 interface DirectiveScope extends ng.IScope {
     ngModel : any[];
+    form : any[];
     controller : ComplexUIController;
 
+}
+
+interface ComplexModel  {
+    options : {};
 }
 
 // Declare a controller, this is used in the typescriptDirective below
 class ComplexUIController {
 
     directiveScope : DirectiveScope;
-    complexForm : any[];
+    complexForm : ComplexModel;
     complexSchema : {};
+    $broadcast : any;
     complexModel : any;
 
     camelCase = (input:string):string => {
@@ -46,6 +52,19 @@ class ComplexUIController {
         window.alert(JSON.stringify(obj));
     };
 
+    getDefinitions = () => {
+        if (this.directiveScope.form["options"]) {
+            var _defs: {} = this.directiveScope.form["options"]["definitionsCallback"]();
+            this.complexForm = _defs["form"];
+            this.complexSchema = _defs["schema"];
+        }
+    };
+
+    innerSubmit = (form) =>{
+        this.directiveScope.$broadcast("schemaFormValidate");
+        console.log(this.complexModel);
+    };
+
     constructor(private $scope:DirectiveScope, element:JQuery) {
         console.log("Initiating the process controller" + $scope.toString());
         $scope.controller = this;
@@ -66,31 +85,8 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
         // Define a controller, use the function from above, inject the scope
         controller : ['$scope', ComplexUIController],
         link: function(scope: DirectiveScope, iElement, iAttrs, ngModelCtrl) {
-            scope.controller.complexModel = ngModelCtrl;
-            scope.controller.complexForm = [
-                {
-                    "key": "test1",
-                    "title": "Inside the schema form.",
-                    "type": "string"
-                },
-                {
-                    type: "submit",
-                    style: "btn-info",
-                    title: "OK"
-                }
-            ];
-            scope.controller.complexSchema = {
-                type: "object",
-                title: "Complex UI test",
-                properties: {
-                    test1: {
-                        type: "string",
-                        description: "So this is inside the nested ASF instance"
-                    }
-                },
-                required: ["test1"]
-            };
 
+            scope.controller.getDefinitions();
 
         }
     }

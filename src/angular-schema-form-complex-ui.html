@@ -15,10 +15,10 @@ during compilation. This is the recommended way to access the model until there 
     <!-- The showTitle function is implemented by ASF, returns true if the title should be shown -->
     <label ng-show="showTitle()">{{form.title}}</label>
     <!-- Specify the model for the directive and add the directive, making the controller available to the children-->
-    <div ng-model="$$value$$" complex-ui-directive>
+    <div ng-model="$$value$$" ng-init="controller.complexModel=$$value$$" complex-ui-directive>
         <!-- Bind the input to the model-->
 
-        <ng-form name="controller.complexForm" sf-schema="controller.complexSchema" sf-form="controller.complexForm" sf-model="controller.complexModel" ng-submit="submitted(controller.complexForm)"></ng-form>
+        <div name="controller.complexForm" sf-schema="controller.complexSchema" sf-form="controller.complexForm" sf-model="controller.complexModel"></div>
     </div>
     <!-- hasError() and the other functions are also defined by ASF, so this will either
         show a validation error or the description -->

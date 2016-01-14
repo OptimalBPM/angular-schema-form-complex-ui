@@ -26,28 +26,12 @@ interface ComplexModel {
 class ComplexUIController {
 
     directiveScope:DirectiveScope;
-    complexForm:ComplexModel;
-    complexSchema:{};
+    form:ComplexModel;
+    schema:{};
+    model:any;
+
     $broadcast:any;
-    complexModel:any;
 
-    camelCase = (input:string):string => {
-        // Turn the input value into typescript and return it.
-        return input.toLowerCase().replace(/[- ](.)/g, function (match, group1) {
-            return group1.toUpperCase();
-        });
-    };
-
-    makeCamelCase = () => {
-        // This is invoked by the ng-click
-        // The ngModel in ASF is an array, we want to access the actual value
-        var leaf_model = this.directiveScope.ngModel[this.directiveScope.ngModel.length - 1];
-        if (leaf_model.$modelValue) {
-            // If there is something to camel case, do it!
-            leaf_model.$setViewValue(this.camelCase(leaf_model.$modelValue));
-        }
-        ;
-    };
     alertObj = (obj) => {
         window.alert(JSON.stringify(obj));
     };
@@ -59,14 +43,14 @@ class ComplexUIController {
     getDefinitions = () => {
         if (this.directiveScope.form["options"]) {
             var _defs:{} = this.directiveScope.form["options"]["definitionsCallback"]();
-            this.complexForm = _defs["form"];
-            this.complexSchema = _defs["schema"];
+            this.form = _defs["form"];
+            this.schema = _defs["schema"];
         }
     };
 
     innerSubmit = (form) => {
         this.directiveScope.$broadcast("schemaFormValidate");
-        console.log(this.complexModel);
+        console.log(this.model);
     };
 
     constructor(private $scope:DirectiveScope, element:JQuery) {
@@ -76,8 +60,7 @@ class ComplexUIController {
 
 
     }
-}
-;
+};
 
 
 interface modalScope extends ng.IScope {
@@ -112,7 +95,6 @@ angular.module('schemaForm').directive('modal', function () {
                     (<any>$(element)).modal('hide');
             });
 
-
         }
     };
 });
@@ -135,5 +117,3 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
     }
 
 });
-
-

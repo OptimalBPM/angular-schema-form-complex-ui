@@ -90,7 +90,8 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             "options": {
                 "definitionsCallback": $scope.resolveReference,
                 "showButton": true,
-                "buttonCaption": ".."
+                "buttonCaption": "..",
+                "sourceInclude": "example_include.html"
             }
         },
         {

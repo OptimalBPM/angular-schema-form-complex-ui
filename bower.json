@@ -1,15 +1,11 @@
 {
-  "name": "angular-schema-form-typescript",
+  "name": "angular-schema-form-complex-ui",
   "main": [
-    "angular-schema-form-typescript.min.js"
+    "angular-schema-form-complex-ui.js"
   ],
   "version": "0.1.0",
   "authors": [
-    "Optimal BPM",
-    "Nicklas Börjesson <nicklas@optimalbpm.se>",
-    "Textalk",
-    "Denis Dervisevic <denis@dervisevic.se>",
-    "David Jensen <david.lgj@gmail.com>"
+    "Nicklas Börjesson <nicklas@optimalbpm.se>"
   ],
   "moduleType": [
     "globals"

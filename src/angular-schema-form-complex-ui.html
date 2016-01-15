@@ -30,7 +30,12 @@ during compilation. This is the recommended way to access the model until there 
         <div ng-if="form.options.showButton != true">
             <label ng-show="showTitle()">{{form.title}}</label>
             <!-- Add the schema for, not by using a form tag but a div, as forms cannot be nested.  -->
-            <div name="" sf-schema="controller.schema" sf-form="controller.form" sf-model="controller.model"></div>
+            <div ng-if="form.options.sourceInclude != ''">
+                <ng-include src="form.options.sourceInclude"></ng-include>
+            </div>
+            <div ng-if="form.options.sourceInclude == null">
+                <div name="" sf-schema="controller.schema" sf-form="controller.form" sf-model="controller.model"></div>
+            </div>
         </div>
 
     </div>

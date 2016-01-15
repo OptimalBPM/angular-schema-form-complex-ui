@@ -32,10 +32,6 @@ class ComplexUIController {
 
     $broadcast:any;
 
-    alertObj = (obj) => {
-        window.alert(JSON.stringify(obj));
-    };
-
     toggleModal = function () {
         this.directiveScope.showModal = !this.directiveScope.showModal;
     };

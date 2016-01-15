@@ -30,6 +30,26 @@
 
         <p>This is an example of an <a href="https://github.com/Textalk/angular-schema-form/">angular-schema-form</a> add-on.</p>
 
+        <h3>Angular schema form with a nested ASF or a specified include</h3>
+
+
         <form name="selectForm" sf-schema="schema" sf-form="form" sf-model="model" ng-submit="submitted(selectForm)"></form>
+        <h3>Settings</h3>
+        <p>Show button <input type="checkbox" ng-model="form[0]['options']['showButton']" ng-click="$broadcast('schemaFormRedraw')"></p>
+        <p>Use include <input type="text" ng-model="form[0]['options']['sourceInclude']" ng-click="$broadcast('schemaFormRedraw')"></p>
+
+        <h3>Master schema and form</h3>
+        <hr>
+        <p>The main schema is at controller.complexSchema, it is currently:</p>
+        <pre>{{schema| json : spacing}}</pre>
+        <p>The main form is just form. Currently the form has the following values:</p>
+        <pre>{{form| json : spacing}}</pre>
+        <h3>Nested schema and form</h3>
+        <hr>
+        <p>The main schema is at controller.complexSchema, it is currently:</p>
+        <pre>{{resolveReference()["schema"]| json : spacing}}</pre>
+        <p>The main form is just form. Currently the form has the following values:</p>
+        <pre>{{resolveReference()["form"]| json : spacing}}</pre>
+
     </body>
 </html>

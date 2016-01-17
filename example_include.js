@@ -2,7 +2,7 @@
  * Created by nibo on 2016-01-15.
  */
 
-var exampleApp = angular.module("exampleIncludeApp", []);
+var exampleApp = angular.module("exampleApp");
 
 var exampleIncludeController = function ($scope) {
     $scope.showMoreInfo = false;
@@ -33,7 +33,7 @@ exampleApp.directive('exampleIncludeDirective', function () {
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', exampleIncludeController],
         link: function (scope, iElement, iAttrs, ngModelCtrl) {
-           window.alert("ssss");
+           console.log("ssss");
         }
     };
 });

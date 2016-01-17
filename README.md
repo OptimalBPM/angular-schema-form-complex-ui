@@ -13,17 +13,24 @@ what is readily implemented in ASF.
 In Modal mode, a modal is displayed instead of displaying the UI in the form. 
 This is enabled by setting "options.modal" to true.
 
-## Normal mode
-The UI is displayed in the form as it where part of the 
+It is dependent on `bootstrap/js/modal.js` being loaded. 
 
-It it is dependent on `bootstrap/js/modal.js` being loaded. 
+## Normal mode
+The UI is displayed in the form as it where part of the normal form.
 
 ## Custom UI
-If options.includeURI is set, the system will load the HTML it points to.
+If options.includeURI is set, the system will load the HTML it points to and display that.
+See example for details on accessing parentController.schema, parentController.form and parentController.model. 
 
 ## Nested Angular-Schema-Form
-If no
-
+If no includeURI is set, a angular-schema-form instance is displayed.
+Schema and form is loaded using the getDefinitions-callback, which should return a dict with two attributes:
+```
+{
+    schema: {},
+    form: {}
+}
+```
 ### Installation
 To use the example, enter the examples/camelcase folder and run
     

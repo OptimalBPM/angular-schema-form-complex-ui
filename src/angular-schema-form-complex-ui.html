@@ -13,11 +13,11 @@ during compilation. This is the recommended way to access the model until there 
 <!-- hasError is implemented by ASF and returns true if there is a validation error. -->
 <div ng-class="{'has-error': hasError()}">
     <!-- Specify the model for the directive and add the directive, making the controller available to the children-->
-    <div  ng-init="controller.model=$$value$$" complex-ui-directive>
+    <div  ng-init="parentController.model=$$value$$" complex-ui-directive>
 
         <!-- The showTitle function is implemented by ASF, returns true if the title should be shown -->
         <div ng-if="form.options.modal == true" >
-            <label>{{form.title}}</label>&nbsp;<button ng-click="controller.toggleModal()">{{form.options.buttonCaption}}</button>
+            <label>{{form.title}}</label>&nbsp;<button ng-click="parentController.toggleModal()">{{form.options.buttonCaption}}</button>
             <modal title="{{form.title}}" visible="showModal">
                 <div ng-if="form.options.includeURI != ''">
                     <ng-include src="form.options.includeURI"></ng-include>

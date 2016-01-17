@@ -11,7 +11,7 @@
  * @type {angular.Module}
  */
 
-var exampleApp = angular.module("exampleApp", ["schemaForm", "ngLoadScript"]);
+var exampleApp = angular.module("exampleApp", ["schemaForm"]);
 
 exampleApp.controller("exampleController", ["$scope", function ($scope) {
 
@@ -118,4 +118,3 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
         console.log($scope.model);
     };
 }]);
-

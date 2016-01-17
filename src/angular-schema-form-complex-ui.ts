@@ -1,32 +1,6 @@
 /// <reference path="../typings/angularjs/angular.d.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
 
-
-
-var app = angular.module('ngLoadScript', []);
-app.directive('lazyLoadAngular', ():ng.IDirective => {
-    return {
-        restrict: 'E',
-        scope: false,
-        link: function (scope, elem, attr) {
-
-            var s = document.createElement("script");
-            s.type = "text/javascript";
-            var src = elem.attr('src');
-            if (src !== undefined) {
-                s.src = src;
-            }
-            else {
-                var code = elem.text();
-                s.text = code;
-            }
-            document.head.appendChild(s);
-            elem.remove();
-        }
-    };
-});
-
-
 angular.module('schemaForm').config(['schemaFormProvider',
     'schemaFormDecoratorsProvider', 'sfPathProvider',
     function (schemaFormProvider, schemaFormDecoratorsProvider, sfPathProvider) {
@@ -43,7 +17,7 @@ angular.module('schemaForm').config(['schemaFormProvider',
 interface DirectiveScope extends ng.IScope {
     ngModel : any[];
     form : any[];
-    controller : ComplexUIController;
+    parentController : ComplexUIController;
     showModal : boolean;
 }
 
@@ -80,7 +54,7 @@ class ComplexUIController {
 
     constructor(private $scope:DirectiveScope, element:JQuery) {
         console.log("Initiating the process controller" + $scope.toString());
-        $scope.controller = this;
+        $scope.parentController = this;
         this.directiveScope = $scope;
 
 
@@ -136,9 +110,33 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', ComplexUIController],
         link: function (scope:DirectiveScope, iElement, iAttrs, ngModelCtrl) {
-            scope.controller.getDefinitions();
+            scope.parentController.getDefinitions();
 
         }
     }
 
+});
+
+angular.module('schemaForm').directive('script',():ng.IDirective => {
+    return {
+        restrict: 'E',
+        scope: false,
+        link: function (scope :ng.IScope, elem: JQuery, attr: ng.IAttributes) {
+            if (attr["type"] == 'text/javascript-lazy') {
+                var s = document.createElement("script");
+                s.type = "text/javascript";
+                var src = elem.attr('src');
+                if (src !== undefined) {
+                    s.src = src;
+                }
+                else {
+                    var code = elem.text();
+                    s.text = code;
+                }
+                document.head.appendChild(s);
+                elem.remove();
+
+            }
+        }
+    };
 });

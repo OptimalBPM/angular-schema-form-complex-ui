@@ -11,12 +11,12 @@
  * @type {angular.Module}
  */
 
-var exampleApp = angular.module("exampleApp", ["schemaForm"]);
+var exampleApp = angular.module("exampleApp", ["schemaForm", "ngLoadScript"]);
 
 exampleApp.controller("exampleController", ["$scope", function ($scope) {
 
 
-    $scope.resolveReference = function(_ref) {
+    $scope.getDefinitions = function(_ref) {
         return {
             schema: {
                 type: "object",
@@ -40,7 +40,7 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
                     "type": "string"
                 },
                 {
-                    "key": "test2",
+                    "key": "test2   ",
                     "title": "Inside the schema form.",
                     "type": "select",
                     "titleMap": [
@@ -88,17 +88,17 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             "title": "Example of complex structure editor",
             "type": "complex-ui",
             "options": {
-                "definitionsCallback": $scope.resolveReference,
-                "showButton": true,
+                "definitionsCallback": $scope.getDefinitions,
+                "modal": true,
                 "buttonCaption": "..",
-                "sourceInclude": "example_include.html"
+                "includeURI": "example_include.html"
             }
         },
         {
             "key": "anyfield",
             "title": "A string",
             "options": {
-                "definitionsCallback": $scope.resolveReference
+                "definitionsCallback": $scope.getDefinitions
             }
         },
         {

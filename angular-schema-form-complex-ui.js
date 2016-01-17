@@ -1,6 +1,27 @@
-angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><div ng-init=\"controller.model=$$value$$\" complex-ui-directive=\"\"><div ng-if=\"form.options.showButton == true\"><label>{{form.title}}</label>&nbsp;<button ng-click=\"controller.toggleModal()\">{{form.options.buttonCaption}}</button><modal title=\"{{form.title}}\" visible=\"showModal\"><div ng-if=\"form.options.sourceInclude != \'\'\"><ng-include src=\"form.options.sourceInclude\"></ng-include></div><div ng-if=\"form.options.sourceInclude == null\"><div name=\"\" sf-schema=\"controller.schema\" sf-form=\"controller.form\" sf-model=\"controller.model\"></div></div></modal></div><div ng-if=\"form.options.showButton != true\"><label ng-show=\"showTitle()\">{{form.title}}</label><div ng-if=\"form.options.sourceInclude != \'\'\"><ng-include src=\"form.options.sourceInclude\"></ng-include></div><div ng-if=\"form.options.sourceInclude == null\"><div name=\"\" sf-schema=\"controller.schema\" sf-form=\"controller.form\" sf-model=\"controller.model\"></div></div></div></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
+angular.module("schemaForm").run(["$templateCache", function($templateCache) {$templateCache.put("directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html","<div ng-class=\"{\'has-error\': hasError()}\"><div ng-init=\"controller.model=$$value$$\" complex-ui-directive=\"\"><div ng-if=\"form.options.modal == true\"><label>{{form.title}}</label>&nbsp;<button ng-click=\"controller.toggleModal()\">{{form.options.buttonCaption}}</button><modal title=\"{{form.title}}\" visible=\"showModal\"><div ng-if=\"form.options.includeURI != \'\'\"><ng-include src=\"form.options.includeURI\"></ng-include></div><div ng-if=\"form.options.includeURI == null\"><div name=\"\" sf-schema=\"controller.schema\" sf-form=\"controller.form\" sf-model=\"controller.model\"></div></div></modal></div><div ng-if=\"form.options.modal != true\"><label ng-show=\"showTitle()\">{{form.title}}</label><div ng-if=\"form.options.includeURI != \'\'\"><ng-include src=\"form.options.includeURI\"></ng-include></div><div ng-if=\"form.options.includeURI == null\"><div name=\"\" sf-schema=\"controller.schema\" sf-form=\"controller.form\" sf-model=\"controller.model\"></div></div></div></div><span class=\"help-block\">{{ (hasError() && errorMessage(schemaError())) || form.description}}</span><br><span ng-show=\"form.some_setting\">The some setting-setting is true for the model at $$value$$!</span></div>");}]);
 /// <reference path="../typings/angularjs/angular.d.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
+var app = angular.module('ngLoadScript', []);
+app.directive('lazyLoadAngular', function () {
+    return {
+        restrict: 'E',
+        scope: false,
+        link: function (scope, elem, attr) {
+            var s = document.createElement("script");
+            s.type = "text/javascript";
+            var src = elem.attr('src');
+            if (src !== undefined) {
+                s.src = src;
+            }
+            else {
+                var code = elem.text();
+                s.text = code;
+            }
+            document.head.appendChild(s);
+            elem.remove();
+        }
+    };
+});
 angular.module('schemaForm').config(['schemaFormProvider',
     'schemaFormDecoratorsProvider', 'sfPathProvider',
     function (schemaFormProvider, schemaFormDecoratorsProvider, sfPathProvider) {

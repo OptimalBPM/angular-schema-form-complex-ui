@@ -3,19 +3,26 @@ Complex UI add-on
 =================
 ### About
 
-This is an angular-UI-addon.
+This is an Angular-Schema-Form UI add-on that provides a way to implement advanced user interfaces for a properties.
+For example, some properties are actually not simple strings, but settings structures and need more customization that
+what is readily implemented in ASF.
 
-There is a demo, basically just the published html with bootstrap installed, running at:<br /> 
-http://demo.optimalbpm.se/angular-schema-form-add-ons/examples/typescript/example.html
+# Features
 
-It uses:
-* a directive to access the model and expose the controller to the child elements
-* a controller to handle the logic of the camel-casing
+## Modal mode
+In Modal mode, a modal is displayed instead of displaying the UI in the form. 
+This is enabled by setting "options.modal" to true.
 
-These might not be needed if you do not need any local logic, but are here for the example.
+## Normal mode
+The UI is displayed in the form as it where part of the 
 
-Look at the source for more information on how it works, it is overly documented.
+It it is dependent on `bootstrap/js/modal.js` being loaded. 
 
+## Custom UI
+If options.includeURI is set, the system will load the HTML it points to.
+
+## Nested Angular-Schema-Form
+If no
 
 ### Installation
 To use the example, enter the examples/camelcase folder and run

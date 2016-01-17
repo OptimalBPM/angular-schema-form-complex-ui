@@ -35,8 +35,8 @@
 
         <form name="selectForm" sf-schema="schema" sf-form="form" sf-model="model" ng-submit="submitted(selectForm)"></form>
         <h3>Settings</h3>
-        <p>Show button <input type="checkbox" ng-model="form[0]['options']['showButton']" ng-click="$broadcast('schemaFormRedraw')"></p>
-        <p>Use include <input type="text" ng-model="form[0]['options']['sourceInclude']" ng-click="$broadcast('schemaFormRedraw')"></p>
+        <p>Modal <input type="checkbox" ng-model="form[0]['options']['modal']" ng-click="$broadcast('schemaFormRedraw')"></p>
+        <p>Use template (Include URI)<input type="text" ng-model="form[0]['options']['includeURI']" ng-click="$broadcast('schemaFormRedraw')"></p>
 
         <h3>Master schema and form</h3>
         <hr>

@@ -1,9 +1,38 @@
 /// <reference path="../typings/angularjs/angular.d.ts" />
 /// <reference path="../typings/jquery/jquery.d.ts" />
 
+
+
+var app = angular.module('ngLoadScript', []);
+app.directive('lazyLoadAngular', ():ng.IDirective => {
+    return {
+        restrict: 'E',
+        scope: false,
+        link: function (scope, elem, attr) {
+
+            var s = document.createElement("script");
+            s.type = "text/javascript";
+            var src = elem.attr('src');
+            if (src !== undefined) {
+                s.src = src;
+            }
+            else {
+                var code = elem.text();
+                s.text = code;
+            }
+            document.head.appendChild(s);
+            elem.remove();
+        }
+    };
+});
+
+
 angular.module('schemaForm').config(['schemaFormProvider',
     'schemaFormDecoratorsProvider', 'sfPathProvider',
     function (schemaFormProvider, schemaFormDecoratorsProvider, sfPathProvider) {
+
+
+
 
         // Second, we want it to show if someone have explicitly set the form type
         schemaFormDecoratorsProvider.addMapping('bootstrapDecorator', 'complex-ui',

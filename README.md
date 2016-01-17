@@ -27,8 +27,8 @@ If no includeURI is set, a angular-schema-form instance is displayed.
 Schema and form is loaded using the getDefinitions-callback, which should return a dict with two attributes:
 ```
 {
-    schema: {},
-    form: {}
+    schema: { ...JSON Schema definition...},
+    form: { ...ASF form array...}
 }
 ```
 ### Installation

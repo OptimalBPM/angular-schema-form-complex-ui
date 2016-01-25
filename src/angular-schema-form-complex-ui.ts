@@ -59,7 +59,7 @@ class ComplexUIController {
     };
 
     constructor(private $scope:DirectiveScope, element:JQuery) {
-        console.log("Initiating the process controller" + $scope.toString());
+        console.log("Initiating the ComplexUI controller" + $scope.toString());
         $scope.parentController = this;
         this.directiveScope = $scope;
 

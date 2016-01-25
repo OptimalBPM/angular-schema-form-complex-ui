@@ -15,7 +15,7 @@ var exampleApp = angular.module("exampleApp", ["schemaForm"]);
 
 exampleApp.controller("exampleController", ["$scope", function ($scope) {
 
-
+    // This function returns the schema and form for the field.
     $scope.getDefinitions = function(_ref) {
         return {
             schema: {
@@ -60,8 +60,7 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             }
     };
 
-    // This is the schema definition, note that the title, even though it is possible to, isn't defined here.
-    // This to make the schema more portable, schemas are for validation and definition and can be used everywhere.
+    // This is the schema definition for the whole thing.
     $scope.schema = {
         type: "object",
         title: "Complex UI ",

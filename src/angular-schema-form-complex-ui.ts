@@ -13,23 +13,23 @@ angular.module('schemaForm').config(['schemaFormProvider',
             'directives/decorators/bootstrap/complex-ui/angular-schema-form-complex-ui.html');
     }]);
 
-
+interface ComplexModel {
+    options : {};
+}
 interface DirectiveScope extends ng.IScope {
     ngModel : any[];
-    form : any[];
+    form : ComplexModel;
     parentController : ComplexUIController;
     showModal : boolean;
 }
 
-interface ComplexModel {
-    options : {};
-}
+
 
 // Declare a controller, this is used in the typescriptDirective below
 class ComplexUIController {
 
     directiveScope:DirectiveScope;
-    form:ComplexModel;
+    form: {};
     schema:{};
     model:any;
 
@@ -48,7 +48,14 @@ class ComplexUIController {
                 var schemaRef:string = null
             }
             var _defs:{} = this.directiveScope.form["options"]["definitionsCallback"](schemaRef);
-            this.form = _defs["form"];
+            if ("form" in _defs) {
+                this.form = _defs["form"];
+            } else
+            if ("complexForm" in this.directiveScope.form["options"]) {
+                this.form = this.directiveScope.form["options"]["complexForm"];
+            } else {
+                this.form = ["*"];
+            }
             this.schema = _defs["schema"];
         }
     };

@@ -33,7 +33,7 @@ exampleApp.directive('exampleIncludeDirective', function () {
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', exampleIncludeController],
         link: function (scope, iElement, iAttrs, ngModelCtrl) {
-           console.log("ssss");
+           console.log("In example directive link function");
         }
     };
 });

@@ -3,7 +3,7 @@
     <h1>Example of an advanced user interface to input whatever needed data needed.</h1>
     <p>The data model is parentController.model, currently it is:</p>
     <pre>{{parentController.model| json : spacing}}</pre>
-    <p>Set it here: <input ng-model="controller.model.test1"></p>
+    <p>Set it here: <input ng-model="parentController.model.test1"></p>
     <!-- The controller is also in example_include.js -->
     <p>We have a controller here, too, <button type="button" ng-click="testController('Yay, the controller works')">test it</button>
     <p>We can show more information below, <button type="button" ng-click="toggleMoreInfo()">{{moreInfoCaption}}</button></p>

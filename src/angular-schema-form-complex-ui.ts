@@ -41,7 +41,13 @@ class ComplexUIController {
 
     getDefinitions = () => {
         if (this.directiveScope.form["options"]) {
-            var _defs:{} = this.directiveScope.form["options"]["definitionsCallback"]();
+            if ("schemaRef" in this.directiveScope.form["options"]) {
+                var schemaRef:string = this.directiveScope.form["options"]["schemaRef"]
+            }
+            else {
+                var schemaRef:string = null
+            }
+            var _defs:{} = this.directiveScope.form["options"]["definitionsCallback"](schemaRef);
             this.form = _defs["form"];
             this.schema = _defs["schema"];
         }

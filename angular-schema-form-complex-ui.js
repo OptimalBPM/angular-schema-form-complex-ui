@@ -17,7 +17,13 @@ var ComplexUIController = (function () {
         };
         this.getDefinitions = function () {
             if (_this.directiveScope.form["options"]) {
-                var _defs = _this.directiveScope.form["options"]["definitionsCallback"]();
+                if ("schemaRef" in _this.directiveScope.form["options"]) {
+                    var schemaRef = _this.directiveScope.form["options"]["schemaRef"];
+                }
+                else {
+                    var schemaRef = null;
+                }
+                var _defs = _this.directiveScope.form["options"]["definitionsCallback"](schemaRef);
                 _this.form = _defs["form"];
                 _this.schema = _defs["schema"];
             }

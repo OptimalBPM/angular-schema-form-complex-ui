@@ -15,25 +15,50 @@ var ComplexUIController = (function () {
         this.toggleModal = function () {
             this.directiveScope.showModal = !this.directiveScope.showModal;
         };
+        this.getCallback = function (callback) {
+            if (typeof (callback) == "string") {
+                var _result = _this.directiveScope.$parent.evalExpr(callback);
+                if (typeof (_result) == "function") {
+                    return _result;
+                }
+                else {
+                    throw ("A callback string must match name of a function in the parent scope");
+                }
+            }
+            else if (typeof (callback) == "function") {
+                return callback;
+            }
+            else {
+                throw ("A callback must either be a string matching the name of a function in the parent scope or a " +
+                    "direct function reference");
+            }
+        };
         this.getDefinitions = function () {
             if (_this.directiveScope.form["options"]) {
+                var schemaRef = void 0;
                 if ("schemaRef" in _this.directiveScope.form["options"]) {
-                    var schemaRef = _this.directiveScope.form["options"]["schemaRef"];
+                    schemaRef = _this.directiveScope.form["options"]["schemaRef"];
                 }
                 else {
-                    var schemaRef = null;
+                    schemaRef = null;
                 }
-                var _defs = _this.directiveScope.form["options"]["definitionsCallback"](schemaRef);
-                if ("form" in _defs) {
-                    _this.form = _defs["form"];
+                if ("definitionsCallback" in _this.directiveScope.form["options"]) {
+                    var callback = _this.getCallback(_this.directiveScope.form["options"]["definitionsCallback"]);
+                    var _defs = callback(schemaRef);
+                    // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
+                    // How can some get a schema and some not.
+                    if ("form" in _defs) {
+                        _this.form = _defs["form"];
+                    }
+                    else if ("complexForm" in _this.directiveScope.form["options"]) {
+                        _this.form = _this.directiveScope.form["options"]["complexForm"];
+                    }
+                    else {
+                        _this.form = ["*"];
+                    }
+                    _this.form.onChange = _this.directiveScope.form.onChange;
+                    _this.schema = _defs["schema"];
                 }
-                else if ("complexForm" in _this.directiveScope.form["options"]) {
-                    _this.form = _this.directiveScope.form["options"]["complexForm"];
-                }
-                else {
-                    _this.form = ["*"];
-                }
-                _this.schema = _defs["schema"];
             }
         };
         this.innerSubmit = function (form) {
@@ -45,7 +70,7 @@ var ComplexUIController = (function () {
         this.directiveScope = $scope;
     }
     return ComplexUIController;
-})();
+}());
 ;
 angular.module('schemaForm').directive('modal', function () {
     return {
@@ -80,7 +105,7 @@ angular.module('schemaForm').directive('complexUiDirective', function () {
     return {
         require: [],
         restrict: 'A',
-        // Do not create a isolate scope, makeCamelCase should be available to the button element
+        // Do not create a isolate scope, pass on
         scope: false,
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', ComplexUIController],

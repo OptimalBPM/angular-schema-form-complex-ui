@@ -18,13 +18,51 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
     // This function returns the schema and form for the field.
     $scope.getDefinitions = function(_ref) {
         return {
-            schema: {
+            schema:
+            {
                 type: "object",
                 title: "Complex UI test",
                 properties: {
                     test1: {
-                        type: "string",
-                        description: "So this is inside the nested ASF instance"
+                        "properties": {
+                            "delete": {
+                                "type": "boolean"
+                            },
+                            "insert": {
+                                "type": "boolean"
+                            },
+                            "mappings": {
+                                "items": {
+                                    "properties": {
+                                        "dest_reference": {
+                                            "type": "string"
+                                        },
+                                        "is_key": {
+                                            "type": "boolean"
+                                        },
+                                        "src_datatype": {
+                                            "type": "string"
+                                        },
+                                        "src_reference": {
+                                            "type": "string"
+                                        },
+                                        "substitution": {
+                                            "properties": {},
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                },
+                                "type": "array"
+                            },
+                            "post_execute_sql": {
+                                "type": "string"
+                            },
+                            "update": {
+                                "type": "boolean"
+                            }
+                        },
+                        "type": "object"
                     },
                     test2: {
                         type: "string",
@@ -33,30 +71,8 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
                 },
                 required: ["test1"]
             },
-            form : [
-                {
-                    "key": "test1",
-                    "title": "Inside the schema form.",
-                    "type": "string"
-                },
-                {
-                    "key": "test2   ",
-                    "title": "Inside the schema form.",
-                    "type": "select",
-                    "titleMap": [
-                        {"value": "value1", "name": "text1"},
-                        {"value": "value2", "name": "text2"},
-                        {"value": "value3", "name": "text3"},
-                        {"value": "value4", "name": "text4"}
-                    ]
-                },
-                {
-                    type: "button",
-                    style: "btn-ok",
-                    title: "OK inner",
-                    onClick: "controller.innerSubmit(this)"
-                }
-            ]
+            form : ["*"]
+
             }
     };
 
@@ -87,18 +103,21 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             "title": "Example of complex structure editor",
             "type": "complex-ui",
             "options": {
-                "definitionsCallback": $scope.getDefinitions,
+                "definitionsCallback": "getDefinitions",
                 "modal": true,
                 "buttonCaption": "..",
                 "includeURI": "example_include.html"
-            }
+            },
+            "onChange": $scope.onChange
+
         },
         {
             "key": "anyfield",
             "title": "A string",
             "options": {
-                "definitionsCallback": $scope.getDefinitions
-            }
+                "definitionsCallback": "getDefinitions"
+            },
+            "onChange": $scope.onChange
         },
         {
             type: "submit",
@@ -106,10 +125,10 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             title: "OK outer"
         }
     ];
-    // Initiate the model
-    $scope.model = {};
-    // Initiate one of the inputs
-    $scope.model.complexUIField = {"test1": "A value."};
+
+    $scope.onChange =  function (modelValue, key) {
+        console.log("Value: " + modelValue +  " Key:" + key)
+    };
 
     // This is called by asf on submit, specified in example.html, ng-submit.
     $scope.submitted = function (form) {

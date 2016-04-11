@@ -19,6 +19,7 @@ interface ComplexModel {
 interface DirectiveScope extends ng.IScope {
     ngModel : any[];
     form : ComplexModel;
+    schema? : any;
     parentController : ComplexUIController;
     showModal : boolean;
 }
@@ -39,24 +40,60 @@ class ComplexUIController {
         this.directiveScope.showModal = !this.directiveScope.showModal;
     };
 
-    getDefinitions = () => {
-        if (this.directiveScope.form["options"]) {
-            if ("schemaRef" in this.directiveScope.form["options"]) {
-                var schemaRef:string = this.directiveScope.form["options"]["schemaRef"]
+
+    getCallback = (callback)  => {
+        if (typeof(callback) == "string") {
+            var _result = (this.directiveScope.$parent as any).evalExpr(callback);
+            if (typeof(_result) == "function") {
+                return _result;
             }
             else {
-                var schemaRef:string = null
+                throw("A callback string must match name of a function in the parent scope")
             }
-            var _defs:{} = this.directiveScope.form["options"]["definitionsCallback"](schemaRef);
-            if ("form" in _defs) {
-                this.form = _defs["form"];
-            } else
-            if ("complexForm" in this.directiveScope.form["options"]) {
-                this.form = this.directiveScope.form["options"]["complexForm"];
-            } else {
-                this.form = ["*"];
+
+        }
+        else if (typeof(callback) == "function") {
+            return callback;
+        }
+        else {
+            throw("A callback must either be a string matching the name of a function in the parent scope or a " +
+            "direct function reference")
+
+        }
+    };
+
+
+
+    getDefinitions = () => {
+        if (this.directiveScope.form["options"]) {
+            let schemaRef:string;
+            if ("schemaRef" in this.directiveScope.form["options"]) {
+                schemaRef = this.directiveScope.form["options"]["schemaRef"]
             }
-            this.schema = _defs["schema"];
+            else {
+                schemaRef = null
+            }
+
+
+
+            if ("definitionsCallback" in this.directiveScope.form["options"]) {
+                let callback = this.getCallback(this.directiveScope.form["options"]["definitionsCallback"])
+                let _defs:{} = callback(schemaRef);
+
+                // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
+                // How can some get a schema and some not.
+                if ("form" in _defs) {
+                    this.form = _defs["form"];
+                } else
+                if ("complexForm" in this.directiveScope.form["options"]) {
+                    this.form = this.directiveScope.form["options"]["complexForm"];
+                } else {
+                    this.form = ["*"];
+                }
+                (this.form as any).onChange = (this.directiveScope.form as any).onChange;
+                this.schema = _defs["schema"];
+
+            }
         }
     };
 
@@ -118,7 +155,7 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
 
         require: [],
         restrict: 'A',
-        // Do not create a isolate scope, makeCamelCase should be available to the button element
+        // Do not create a isolate scope, pass on
         scope: false,
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', ComplexUIController],

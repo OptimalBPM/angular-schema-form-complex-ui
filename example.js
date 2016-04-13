@@ -100,7 +100,7 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
 
         {
             "key": "complexUIField",
-            "title": "Example of comsssplex structure editor",
+            "title": "Example of complex structure editor",
             "type": "complex-ui",
             "htmlClass": "col-lg-9",
             "options": {

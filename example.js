@@ -95,13 +95,14 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
         required: ["complexUIField"]
     };
 
-    // Define all UI aspects of the form
+    // Define all UI aspects of the form (default for HTML class is modal-dialog, a little bit too tight in many cases)
     $scope.form = [
 
         {
             "key": "complexUIField",
-            "title": "Example of complex structure editor",
+            "title": "Example of comsssplex structure editor",
             "type": "complex-ui",
+            "htmlClass": "col-lg-9",
             "options": {
                 "definitionsCallback": "getDefinitions",
                 "modal": true,

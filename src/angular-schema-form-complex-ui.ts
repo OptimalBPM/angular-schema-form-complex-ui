@@ -14,34 +14,33 @@ angular.module('schemaForm').config(['schemaFormProvider',
     }]);
 
 interface ComplexModel {
-    options : {};
+    options: {};
 }
 interface DirectiveScope extends ng.IScope {
-    ngModel : any[];
-    form : ComplexModel;
-    schema? : any;
-    parentController : ComplexUIController;
-    showModal : boolean;
+    ngModel: any[];
+    form: ComplexModel;
+    schema?: any;
+    parentController: ComplexUIController;
+    showModal: boolean;
 }
-
 
 
 // Declare a controller, this is used in the typescriptDirective below
 class ComplexUIController {
 
-    directiveScope:DirectiveScope;
+    directiveScope: DirectiveScope;
     form: {};
-    schema:{};
-    model:any;
+    schema: {};
+    model: any;
 
-    $broadcast:any;
+    $broadcast: any;
 
     toggleModal = function () {
         this.directiveScope.showModal = !this.directiveScope.showModal;
     };
 
 
-    getCallback = (callback)  => {
+    getCallback = (callback) => {
         if (typeof(callback) == "string") {
             var _result = (this.directiveScope.$parent as any).evalExpr(callback);
             if (typeof(_result) == "function") {
@@ -63,10 +62,9 @@ class ComplexUIController {
     };
 
 
-
     getDefinitions = () => {
         if (this.directiveScope.form["options"]) {
-            let schemaRef:string;
+            let schemaRef: string;
             if ("schemaRef" in this.directiveScope.form["options"]) {
                 schemaRef = this.directiveScope.form["options"]["schemaRef"]
             }
@@ -75,17 +73,15 @@ class ComplexUIController {
             }
 
 
-
             if ("definitionsCallback" in this.directiveScope.form["options"]) {
                 let callback = this.getCallback(this.directiveScope.form["options"]["definitionsCallback"])
-                let _defs:{} = callback(schemaRef);
+                let _defs: {} = callback(schemaRef);
 
                 // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
-                // How can some get a schema and some not.
+                // How can some get a form and some not.
                 if ("form" in _defs) {
                     this.form = _defs["form"];
-                } else
-                if ("complexForm" in this.directiveScope.form["options"]) {
+                } else if ("complexForm" in this.directiveScope.form["options"]) {
                     this.form = this.directiveScope.form["options"]["complexForm"];
                 } else {
                     this.form = ["*"];
@@ -102,31 +98,36 @@ class ComplexUIController {
         console.log(this.model);
     };
 
-    constructor(private $scope:DirectiveScope, element:JQuery) {
+    constructor(private $scope: DirectiveScope, element: JQuery) {
         console.log("Initiating the ComplexUI controller" + $scope.toString());
         $scope.parentController = this;
         this.directiveScope = $scope;
 
 
     }
-};
+}
+;
 
 
 interface modalScope extends ng.IScope {
-    title : string;
+    title: string;
+    htmlClass: string;
+    fieldHtmlClass: string;
 }
 
 
 angular.module('schemaForm').directive('modal', function () {
+
+    // TODO: Add setting for class
     return {
         template: '<div class="modal fade">' +
-        '<div class="modal-dialog">' +
+        '<div class="{{ htmlClass ? htmlClass: \'modal-dialog\'}}">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
         '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
         '<h4 class="modal-title">{{ title }}</h4>' +
         '</div>' +
-        '<div class="modal-body" ng-transclude></div>' +
+        '<div class="{{ fieldHtmlClass ? fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
         '</div>' +
         '</div>' +
         '</div>',
@@ -134,9 +135,14 @@ angular.module('schemaForm').directive('modal', function () {
         transclude: true,
         replace: true,
         scope: true,
-        link: function postLink(scope : modalScope, element : JQuery, attrs : ng.IAttributes) {
+        link: function postLink(scope: modalScope, element: JQuery, attrs: ng.IAttributes) {
             scope.title = attrs["title"];
-
+            if ("htmlClass" in (scope.$parent.$parent as any).form) {
+                scope.htmlClass = (scope.$parent.$parent as any).form.htmlClass;
+            }
+            if ("fieldHtmlClass" in (scope.$parent.$parent as any).form) {
+                scope.fieldHtmlClass = (scope.$parent.$parent as any).form.fieldHtmlClass;
+            }
             scope.$watch((<any>(attrs)).visible, function (value) {
                 if (value == true)
                     (<any>$(element)).modal('show');
@@ -150,7 +156,7 @@ angular.module('schemaForm').directive('modal', function () {
 
 
 // Create a directive to properly access the ngModel set in the view (src/angular-schema-form-typescript.html)
-angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective => {
+angular.module('schemaForm').directive('complexUiDirective', (): ng.IDirective => {
     return {
 
         require: [],
@@ -159,7 +165,7 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
         scope: false,
         // Define a controller, use the function from above, inject the scope
         controller: ['$scope', ComplexUIController],
-        link: function (scope:DirectiveScope, iElement, iAttrs, ngModelCtrl) {
+        link: function (scope: DirectiveScope, iElement, iAttrs, ngModelCtrl) {
             scope.parentController.getDefinitions();
 
         }
@@ -167,11 +173,11 @@ angular.module('schemaForm').directive('complexUiDirective', ():ng.IDirective =>
 
 });
 
-angular.module('schemaForm').directive('script',():ng.IDirective => {
+angular.module('schemaForm').directive('script', (): ng.IDirective => {
     return {
         restrict: 'E',
         scope: false,
-        link: function (scope :ng.IScope, elem: JQuery, attr: ng.IAttributes) {
+        link: function (scope: ng.IScope, elem: JQuery, attr: ng.IAttributes) {
             if (attr["type"] == 'text/javascript-lazy') {
                 var s = document.createElement("script");
                 s.type = "text/javascript";

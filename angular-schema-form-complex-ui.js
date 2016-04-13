@@ -46,7 +46,7 @@ var ComplexUIController = (function () {
                     var callback = _this.getCallback(_this.directiveScope.form["options"]["definitionsCallback"]);
                     var _defs = callback(schemaRef);
                     // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
-                    // How can some get a schema and some not.
+                    // How can some get a form and some not.
                     if ("form" in _defs) {
                         _this.form = _defs["form"];
                     }
@@ -73,15 +73,16 @@ var ComplexUIController = (function () {
 }());
 ;
 angular.module('schemaForm').directive('modal', function () {
+    // TODO: Add setting for class
     return {
         template: '<div class="modal fade">' +
-            '<div class="modal-dialog">' +
+            '<div class="{{ htmlClass ? htmlClass: \'modal-dialog\'}}">' +
             '<div class="modal-content">' +
             '<div class="modal-header">' +
             '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
             '<h4 class="modal-title">{{ title }}</h4>' +
             '</div>' +
-            '<div class="modal-body" ng-transclude></div>' +
+            '<div class="{{ fieldHtmlClass ? fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -91,6 +92,12 @@ angular.module('schemaForm').directive('modal', function () {
         scope: true,
         link: function postLink(scope, element, attrs) {
             scope.title = attrs["title"];
+            if ("htmlClass" in scope.$parent.$parent.form) {
+                scope.htmlClass = scope.$parent.$parent.form.htmlClass;
+            }
+            if ("fieldHtmlClass" in scope.$parent.$parent.form) {
+                scope.fieldHtmlClass = scope.$parent.$parent.form.fieldHtmlClass;
+            }
             scope.$watch((attrs).visible, function (value) {
                 if (value == true)
                     $(element).modal('show');

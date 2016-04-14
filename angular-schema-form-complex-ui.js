@@ -13,6 +13,7 @@ var ComplexUIController = (function () {
         var _this = this;
         this.$scope = $scope;
         this.toggleModal = function () {
+            // TODO: Fix so one do not have to click extra times to show the modal
             this.directiveScope.showModal = !this.directiveScope.showModal;
         };
         this.getCallback = function (callback) {
@@ -80,7 +81,7 @@ angular.module('schemaForm').directive('modal', function () {
             '<div class="modal-content">' +
             '<div class="modal-header">' +
             '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
-            '<h4 class="modal-title">{{ title }}</h4>' +
+            '<h4 class="modal-title">{{ form.title }}</h4>' +
             '</div>' +
             '<div class="{{ form.fieldHtmlClass ? form.fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
             '</div>' +
@@ -91,7 +92,6 @@ angular.module('schemaForm').directive('modal', function () {
         replace: true,
         scope: true,
         link: function postLink(scope, element, attrs) {
-            scope.title = attrs["title"];
             scope.$watch((attrs).visible, function (value) {
                 if (value == true)
                     $(element).modal('show');

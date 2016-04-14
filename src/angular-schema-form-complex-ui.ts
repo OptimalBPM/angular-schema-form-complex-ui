@@ -37,7 +37,7 @@ class ComplexUIController {
 
     toggleModal = function () {
         // TODO: Fix so one do not have to click extra times to show the modal
-        this.form.showModal = !this.directiveScope.showModal;
+        this.directiveScope.showModal = !this.directiveScope.showModal;
     };
 
 

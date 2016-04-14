@@ -80,7 +80,7 @@ angular.module('schemaForm').directive('modal', function () {
             '<div class="{{ form.htmlClass ? form.htmlClass: \'modal-dialog\'}}">' +
             '<div class="modal-content">' +
             '<div class="modal-header">' +
-            '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
+            '<button type="button" class="close" ng-click="parentController.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
             '<h4 class="modal-title">{{ form.title }}</h4>' +
             '</div>' +
             '<div class="{{ form.fieldHtmlClass ? form.fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
@@ -90,7 +90,7 @@ angular.module('schemaForm').directive('modal', function () {
         restrict: 'E',
         transclude: true,
         replace: true,
-        scope: true,
+        scope: false,
         link: function postLink(scope, element, attrs) {
             scope.$watch((attrs).visible, function (value) {
                 if (value == true)

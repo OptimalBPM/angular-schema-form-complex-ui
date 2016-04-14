@@ -76,13 +76,13 @@ angular.module('schemaForm').directive('modal', function () {
     // TODO: Add setting for class
     return {
         template: '<div class="modal fade">' +
-            '<div class="{{ htmlClass ? htmlClass: \'modal-dialog\'}}">' +
+            '<div class="{{ form.htmlClass ? form.htmlClass: \'modal-dialog\'}}">' +
             '<div class="modal-content">' +
             '<div class="modal-header">' +
             '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
             '<h4 class="modal-title">{{ title }}</h4>' +
             '</div>' +
-            '<div class="{{ fieldHtmlClass ? fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
+            '<div class="{{ form.fieldHtmlClass ? form.fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
             '</div>' +
             '</div>' +
             '</div>',
@@ -92,12 +92,6 @@ angular.module('schemaForm').directive('modal', function () {
         scope: true,
         link: function postLink(scope, element, attrs) {
             scope.title = attrs["title"];
-            if ("htmlClass" in scope.$parent.$parent.form) {
-                scope.htmlClass = scope.$parent.$parent.form.htmlClass;
-            }
-            if ("fieldHtmlClass" in scope.$parent.$parent.form) {
-                scope.fieldHtmlClass = scope.$parent.$parent.form.fieldHtmlClass;
-            }
             scope.$watch((attrs).visible, function (value) {
                 if (value == true)
                     $(element).modal('show');

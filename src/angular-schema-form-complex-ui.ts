@@ -111,8 +111,7 @@ class ComplexUIController {
 
 interface modalScope extends ng.IScope {
     title: string;
-    htmlClass: string;
-    fieldHtmlClass: string;
+
 }
 
 
@@ -121,13 +120,13 @@ angular.module('schemaForm').directive('modal', function () {
     // TODO: Add setting for class
     return {
         template: '<div class="modal fade">' +
-        '<div class="{{ htmlClass ? htmlClass: \'modal-dialog\'}}">' +
+        '<div class="{{ form.htmlClass ? form.htmlClass: \'modal-dialog\'}}">' +
         '<div class="modal-content">' +
         '<div class="modal-header">' +
         '<button type="button" class="close" ng-click="controller.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
         '<h4 class="modal-title">{{ title }}</h4>' +
         '</div>' +
-        '<div class="{{ fieldHtmlClass ? fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
+        '<div class="{{ form.fieldHtmlClass ? form.fieldHtmlClass: \'modal-body\'}} " ng-transclude></div>' +
         '</div>' +
         '</div>' +
         '</div>',
@@ -137,12 +136,7 @@ angular.module('schemaForm').directive('modal', function () {
         scope: true,
         link: function postLink(scope: modalScope, element: JQuery, attrs: ng.IAttributes) {
             scope.title = attrs["title"];
-            if ("htmlClass" in (scope.$parent.$parent as any).form) {
-                scope.htmlClass = (scope.$parent.$parent as any).form.htmlClass;
-            }
-            if ("fieldHtmlClass" in (scope.$parent.$parent as any).form) {
-                scope.fieldHtmlClass = (scope.$parent.$parent as any).form.fieldHtmlClass;
-            }
+
             scope.$watch((<any>(attrs)).visible, function (value) {
                 if (value == true)
                     (<any>$(element)).modal('show');

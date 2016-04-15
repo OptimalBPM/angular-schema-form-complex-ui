@@ -121,7 +121,7 @@ angular.module('schemaForm').directive('modal', function () {
     return {
         template: '<div class="modal fade">' +
         '<div class="{{ form.htmlClass ? form.htmlClass: \'modal-dialog\'}}">' +
-        '<div class="modal-content">' +
+        '<div class="modal-content" style="overflow:auto;">' +
         '<div class="modal-header">' +
         '<button type="button" class="close" ng-click="parentController.toggleModal()" data-dismiss="modal" aria-hidden="true">&times;</button>' +
         '<h4 class="modal-title">{{ form.title }}</h4>' +

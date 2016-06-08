@@ -102,7 +102,6 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
             "key": "complexUIField",
             "title": "Example of complex structure editor",
             "type": "complex-ui",
-            "htmlClass": "col-lg-6",
             "options": {
                 "definitionsCallback": "getDefinitions",
                 "modal": true,
@@ -136,4 +135,5 @@ exampleApp.controller("exampleController", ["$scope", function ($scope) {
         $scope.$broadcast("schemaFormValidate");
         console.log($scope.model);
     };
+    $scope.model = {"complexUIField" : {}}
 }]);

@@ -25,7 +25,7 @@ See example for details on accessing parentController.schema, parentController.f
 ## Nested Angular-Schema-Form
 If no includeURI is set, a angular-schema-form instance is displayed.
 
-Schema and form is loaded by defining the |getDefinitions-callback](https://github.com/OptimalBPM/angular-schema-form-complex-ui/blob/master/example.js#L106), which should return a dict with two attributes:
+Schema and form is loaded by defining the [getDefinitions-callback](https://github.com/OptimalBPM/angular-schema-form-complex-ui/blob/master/example.js#L106), which should return a dict with two attributes:
 ```
 {
     schema: { ...JSON Schema definition...},
@@ -33,9 +33,9 @@ Schema and form is loaded by defining the |getDefinitions-callback](https://gith
 }
 ```
 
-The getDefinitions callback can be a string that identifies a function in the schema form controller, this is useful when storing the form outside the application in pure JSON.
+The getDefinitions callback can be a string that identifies a function in the schema form controller. This is useful when storing the form outside the application in pure JSON.
 
-_NOTE:  However, that will not work with nested complex-UI add-ons. In that case replace the string with a local function reference._
+_NOTE:  However, that will not work when nesting complex-UI add-ons. In that case, replace the string with a local function reference._
 
 ### Installation
 To use the example, enter the examples/camelcase folder and run

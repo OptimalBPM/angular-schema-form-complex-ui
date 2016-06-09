@@ -61,6 +61,21 @@ class ComplexUIController {
         }
     };
 
+    applyDefinitions = (defs) => {
+        // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
+        // How can some get a form and some not.
+        if ("form" in defs) {
+            this.form = defs["form"];
+        }
+        else if ("complexForm" in this.directiveScope.form["options"]) {
+            this.form = this.directiveScope.form["options"]["complexForm"];
+        }
+        else {
+            this.form = ["*"];
+        }
+        (this.form as any).onChange = (this.directiveScope.form as any).onChange;
+        this.schema = defs["schema"];
+    }
 
     getDefinitions = () => {
         if (this.directiveScope.form["options"]) {
@@ -75,20 +90,13 @@ class ComplexUIController {
 
             if ("definitionsCallback" in this.directiveScope.form["options"]) {
                 let callback = this.getCallback(this.directiveScope.form["options"]["definitionsCallback"])
-                let _defs: {} = callback(schemaRef);
-
-                // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
-                // How can some get a form and some not.
-                if ("form" in _defs) {
-                    this.form = _defs["form"];
-                } else if ("complexForm" in this.directiveScope.form["options"]) {
-                    this.form = this.directiveScope.form["options"]["complexForm"];
-                } else {
-                    this.form = ["*"];
+                let _ret = callback(schemaRef);
+                if ('function' === typeof _ret.then) {
+                    _ret.then(this.applyDefinitions);
                 }
-                (this.form as any).onChange = (this.directiveScope.form as any).onChange;
-                this.schema = _defs["schema"];
-
+                else {
+                    this.applyDefinitions(_ret);
+                }
             }
         }
     };

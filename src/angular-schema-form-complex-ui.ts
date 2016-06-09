@@ -92,9 +92,7 @@ class ComplexUIController {
                 let callback = this.getCallback(this.directiveScope.form["options"]["definitionsCallback"])
                 let _ret = callback(schemaRef);
                 if ('function' === typeof _ret.then) {
-                    _ret.then(function(_defs) {
-                        this.applyDefinitions(_defs);
-                    });
+                    _ret.then(this.applyDefinitions);
                 }
                 else {
                     this.applyDefinitions(_ret);

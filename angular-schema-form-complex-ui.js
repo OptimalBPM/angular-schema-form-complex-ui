@@ -33,6 +33,21 @@ var ComplexUIController = (function () {
                     "direct function reference");
             }
         };
+        this.applyDefinitions = function (defs) {
+            // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
+            // How can some get a form and some not.
+            if ("form" in defs) {
+                _this.form = defs["form"];
+            }
+            else if ("complexForm" in _this.directiveScope.form["options"]) {
+                _this.form = _this.directiveScope.form["options"]["complexForm"];
+            }
+            else {
+                _this.form = ["*"];
+            }
+            _this.form.onChange = _this.directiveScope.form.onChange;
+            _this.schema = defs["schema"];
+        };
         this.getDefinitions = function () {
             if (_this.directiveScope.form["options"]) {
                 var schemaRef = void 0;
@@ -44,20 +59,15 @@ var ComplexUIController = (function () {
                 }
                 if ("definitionsCallback" in _this.directiveScope.form["options"]) {
                     var callback = _this.getCallback(_this.directiveScope.form["options"]["definitionsCallback"]);
-                    var _defs = callback(schemaRef);
-                    // TODO: This is probably in the wrong order, it should be possible to read form and schema the usual way.
-                    // How can some get a form and some not.
-                    if ("form" in _defs) {
-                        _this.form = _defs["form"];
-                    }
-                    else if ("complexForm" in _this.directiveScope.form["options"]) {
-                        _this.form = _this.directiveScope.form["options"]["complexForm"];
+                    var _ret = callback(schemaRef);
+                    if ('function' === typeof _ret.then) {
+                        _ret.then(function (_defs) {
+                            this.applyDefinitions(_defs);
+                        });
                     }
                     else {
-                        _this.form = ["*"];
+                        _this.applyDefinitions(_ret);
                     }
-                    _this.form.onChange = _this.directiveScope.form.onChange;
-                    _this.schema = _defs["schema"];
                 }
             }
         };

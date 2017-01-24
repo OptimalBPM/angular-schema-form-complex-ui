@@ -3,8 +3,8 @@ Complex UI add-on
 =================
 ### About
 
-This is an Angular-Schema-Form UI add-on that provides a way to implement advanced user interfaces for a properties.
-For example, some properties are actually not simple strings, but settings structures and need more customization that
+This is an Angular-Schema-Form UI add-on that provides a way to implement advanced user interfaces for properties.
+For example, some properties are actually not simple strings, but entire settings structures and need more customization that
 what is readily implemented in ASF.
 
 # Features
@@ -16,7 +16,7 @@ This is enabled by setting "options.modal" to true.
 It is dependent on `bootstrap/js/modal.js` being loaded. 
 
 ## Normal mode
-The UI is displayed in the form as it where part of the normal form.
+The UI is displayed in the form as it were part of the normal form.
 
 ## Custom UI
 If options.includeURI is set, the system will load the HTML it points to and display that.
